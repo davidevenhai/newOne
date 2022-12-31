@@ -5,13 +5,13 @@ public class Property {
     private Integer price;
     private int buildingType;
     private String[] buildingTypes = {"", "Regular apartment", "Penthouse apartment", "Private house"};
-    private boolean isRentable;
+    private Boolean isRentable;
     private Integer houseNumber;
     private Integer floorNumber;
     private User sellerName;
 
 
-    public Property(String city, String street, Integer numberOfRooms, Integer price, int buildingType, boolean isRentable, Integer houseNumber, Integer floorNumber, User sellerName) {
+    public Property(String city, String street, Integer numberOfRooms, Integer price, int buildingType, Boolean isRentable, Integer houseNumber, Integer floorNumber, User sellerName) {
         this.city = city;
         this.street = street;
         this.numberOfRooms = numberOfRooms;
@@ -26,7 +26,7 @@ public class Property {
     @Override
     public String toString() {
         return city + "-" + street + " " + houseNumber + ".\n" +
-                buildingTypes[this.buildingType] + "- for " + ConversionRentable() + ":" + this.numberOfRooms + " rooms,floor" + this.floorNumber + "\n" +
+                buildingTypes[this.buildingType] + " - for " + ConversionRentable() + ":" + this.numberOfRooms + " rooms ,floor number " + this.floorNumber + "\n" +
                 "Price: "+ this.price+"$.\n"+
                 "Contact info: "+this.sellerName;
     }
