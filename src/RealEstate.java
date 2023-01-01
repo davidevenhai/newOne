@@ -358,7 +358,7 @@ public class RealEstate {
             nameFloor = scanner.nextLine();
              floor=isValidNum(nameFloor);
         } while (floor==-1) ;
-        //INT CHECK
+        //INT CHECKFH
             int room;
 
             do {
