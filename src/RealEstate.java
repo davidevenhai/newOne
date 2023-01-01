@@ -24,25 +24,25 @@ public class RealEstate {
         City carmiel = new City("Carmiel", "North", "Paratroops, Navon");
         this.cities = new City[]{yeruham, dimona, ashkelon, ashdod, telAviv, rishonLezion, netanya, herzliya, nahariya, carmiel};
         Scanner scanner = new Scanner(System.in);
-        int choice;
+        String choice;
         do {
             System.out.println("""
                     Please enter 1 - to create a new user
                     Please enter 2 - to log in
                     Please enter 3 to quit the program""");
-            choice = scanner.nextInt();
+            choice = scanner.nextLine();
             switch (choice) {
-                case 1 -> createUser();
-                case 2 -> {
+                case "1" -> createUser();
+                case "2" -> {
                     User user = login();
                     if (user != null) {
                         menuProperty(user);
                     }
                 }
-                case 3 -> endProgram();
+                case "3" -> endProgram();
             }
 
-        } while (choice != 3);
+        } while (choice != "3");
     }
 
     public void endProgram() {
@@ -351,46 +351,69 @@ public class RealEstate {
     public boolean buildingApartment(User user, int city) {
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("What floor is the property on?");
-        int floor = scanner.nextInt();
-        System.out.println("How many rooms are in the property?");
-        int room = scanner.nextInt();
-        System.out.println("What is the property's house number?");
-        int homeNumber = scanner.nextInt();
-        boolean rentOrSale = false;
-        int rentOrSaleInt;
+        String nameFloor;
+        int floor;
         do {
-            System.out.println("Press 1 if the building is for rent\t" +
-                    "press 2 if the building is for sale");
-            rentOrSaleInt = scanner.nextInt();
-            if (rentOrSaleInt == 1) {
-                rentOrSale = true;
-            }
-            if (rentOrSaleInt == 2) {
-                rentOrSale = false;
-            }
-        } while (rentOrSaleInt != 1 && rentOrSaleInt != 2);
-        System.out.println("What is the price for the property?");
-        int price = scanner.nextInt();
-        boolean ifCreated = false;
-        Property property1 = new Property(this.cities[city].getName(), this.cities[city].getAvailableStreets(), room, price, 1, rentOrSale, homeNumber, floor, user);
+            System.out.println("What floor is the property on?");
+            nameFloor = scanner.nextLine();
+             floor=isValidNum(nameFloor);
+        } while (floor==-1) ;
+            int room;
 
-        for (int j = 0; j < this.properties.length; j++) {
-            if (properties[j] == null) {
-                properties[j] = property1;
-                ifCreated = true;
-                break;
-            }
-        }
+            do {
+                System.out.println("How many rooms are in the property?");
+                room = scanner.nextInt();
+            } while (room < 0);
+            System.out.println("What is the property's house number?");
+            int homeNumber = scanner.nextInt();
+            boolean rentOrSale = false;
+            int rentOrSaleInt;
+            do {
+                System.out.println("Press 1 if the building is for rent\t" +
+                        "press 2 if the building is for sale");
+                rentOrSaleInt = scanner.nextInt();
+                if (rentOrSaleInt == 1) {
+                    rentOrSale = true;
+                }
+                if (rentOrSaleInt == 2) {
+                    rentOrSale = false;
+                }
+            } while (rentOrSaleInt != 1 && rentOrSaleInt != 2);
+            System.out.println("What is the price for the property?");
+            int price = scanner.nextInt();
+            boolean ifCreated = false;
+            Property property1 = new Property(this.cities[city].getName(), this.cities[city].getAvailableStreets(), room, price, 1, rentOrSale, homeNumber, floor, user);
 
-        if (ifCreated) {
-            System.out.println("Property saved");
-            menuProperty(user);
-        } else {
-            System.out.println("The property did not assign to the system");
+            for (int j = 0; j < this.properties.length; j++) {
+                if (properties[j] == null) {
+                    properties[j] = property1;
+                    ifCreated = true;
+                    break;
+                }
+            }
+
+            if (ifCreated) {
+                System.out.println("Property saved");
+                menuProperty(user);
+            } else {
+                System.out.println("The property did not assign to the system");
+            }
+            return ifCreated;
         }
-        return ifCreated;
+    private int isValidNum (String num) {
+        boolean check=true;
+        int number=-1;
+        for(int i=0;i<num.length();i++){
+        if(num.charAt(i)<'0' || num.charAt(i)>'9') {
+            check = false;
+            break;
+        }
+        }
+        if(check)number=Integer.parseInt(num);
+        return number;
     }
+
+
     //O(n) Complexity
     public void removeProperty(User user) {
         final int MAX_PROPERTY = 5;
