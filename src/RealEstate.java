@@ -479,7 +479,7 @@ public class RealEstate {
     }
 
     //O(n) Complexity
-    public Property[] search(User user) {
+    public Property[] search(User user) { // לא לקבל את המידע מתוך המחלקה וליצור מתודה לחיפוש מתוך הנכסים
         Scanner scanner = new Scanner(System.in);
         int rentOrSaleInt;
         boolean rentOrSale = false;

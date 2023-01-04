@@ -14,10 +14,13 @@ public class User {
 
     public String getName() {
         return name;
-    }
+    }// צריך לבנות מתודה שעושה התאמה אם סיסמא נכונה או שם משתמש נכון
 
     public void setName(String name) {
         this.name = name;
+    }
+    public boolean matchCreds(String userName,String password){// על מנת לא לחשוף את הנתונים כלפי חוץ ולהשיאר במחקלקה עצמה
+        return userName.equals(this.name)&&password.equals(this.password);
     }
 
     public String getPassword() {
