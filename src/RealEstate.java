@@ -5,13 +5,13 @@ public class RealEstate {
     private User[] users = new User[5];
     private Property[] properties = new Property[5];
     private City[] cities;
-    private final int FIRST_NUMBER = 0, SECOND_NUMBER = 1, PHONE_LENGTH = 10, MIN_PASS_LENGTH = 5, FILTERING_PARAMETER = -999
-            ,REAL_ESTATE_AGENT = 1, REGULAR_USER = 2, MINIMUM_ROOMS = 0;
+    private final int FIRST_NUMBER = 0, SECOND_NUMBER = 1, PHONE_LENGTH = 10, MIN_PASS_LENGTH = 5,
+            FILTERING_PARAMETER = -999, REAL_ESTATE_AGENT = 1, REGULAR_USER = 2, MINIMUM_ROOMS = 0
+            ,APARTMENT = 1, PENTHOUSE = 2, PRIVATE_HOUSE = 3, FOR_RENT = 1, FOR_SALE = 2;
 
 
     //O(1) Complexity
     public RealEstate() {
-        this.cities = new City[10];
         City yeruham = new City("Yeruham", "Negev", "Rabin, Begin");
         City dimona = new City("Dimona", "Negev", "Kadesh, Ben ami");
         City ashkelon = new City("Ashkelon", "South", "Carmel, Binyamin");
@@ -131,9 +131,11 @@ public class RealEstate {
         Scanner scanner = new Scanner(System.in);
         boolean isRealEstate = false;
         int answer;
+        String tempAnswer;
         do {
             System.out.println("Please enter 1 if you are a real estate agent, 2 if regular user");
-            answer = scanner.nextInt();
+            tempAnswer = scanner.nextLine();
+            answer = isValidNum(tempAnswer);
         } while (answer != REAL_ESTATE_AGENT && answer != REGULAR_USER);
         if (answer == 1) {
             isRealEstate = true;
@@ -178,6 +180,7 @@ public class RealEstate {
         }
         return check;
     }
+
     //O(1) Complexity
     private String phoneNumber() {
         Scanner scanner = new Scanner(System.in);
@@ -220,19 +223,24 @@ public class RealEstate {
                 "5.Search for a property by parameter.\n" +
                 "6.Disconnect and return to the main menu.");
 
-        int newChoice;
+        String newChoice;
+        int newChoiceNumber;
         do {
-            newChoice = scanner.nextInt();
-            switch (newChoice) {
-                case 1 -> postNewProperty(user);
-                case 2 -> removeProperty(user);
-                case 3 -> printAllProperties(user);
-                case 4 -> printProperties(user);
-                case 5 -> search(user);
-                case 6 ->
-                        System.out.println("Back to the main menu"); // צריך לגרום לפונקציה לצאת מהתוכנית, לוודא אם זה יוצא וחוזר לתפריט החוזר
+            newChoice = scanner.nextLine();
+            newChoiceNumber = isValidNum(newChoice);
+            if (newChoiceNumber == -1||newChoiceNumber>6) {
+                System.out.println("You entered invalid input");
+            } else {
+                switch (newChoiceNumber) {
+                    case 1 -> postNewProperty(user);
+                    case 2 -> removeProperty(user);
+                    case 3 -> printAllProperties(user);
+                    case 4 -> printProperties(user);
+                    case 5 -> search(user);
+                    case 6 -> System.out.println("Back to the main menu");
+                }
             }
-        } while (newChoice < 1 || newChoice > 6);
+        } while (newChoiceNumber < 1 || newChoiceNumber > 6);
     }
 
 
@@ -321,13 +329,16 @@ public class RealEstate {
         }
         return checkStreet;
     }
+
     //O(n) Complexity
     public boolean propertyType(User user, int city) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Press 1 for normal apartment in the building\n" +
                 "Press 2 for Penthouse in the building\n" +
                 "Press 3 for a private house");
-        int userChoice = scanner.nextInt();
+        int userChoice;
+        String tempUserChoice = scanner.nextLine();
+        userChoice = isValidNum(tempUserChoice);
         boolean validCheck = false;
         boolean checkBuild = false;
         if (userChoice >= 1 && userChoice <= 3) {
@@ -347,6 +358,7 @@ public class RealEstate {
 
         return checkBuild;
     }
+
     //O(n) Complexity
     public boolean buildingApartment(User user, int city) {
 
@@ -356,61 +368,71 @@ public class RealEstate {
         do {
             System.out.println("What floor is the property on?");
             nameFloor = scanner.nextLine();
-             floor=isValidNum(nameFloor);
-        } while (floor==-1) ;
+            floor = isValidNum(nameFloor);
+        } while (floor == -1);
+        int room;
 
-            int room;
-
-            do {
-                System.out.println("How many rooms are in the property?");
-                room = scanner.nextInt();
-            } while (room < 0);
-            System.out.println("What is the property's house number?");
-            int homeNumber = scanner.nextInt();
-            boolean rentOrSale = false;
-            int rentOrSaleInt;
-            do {
-                System.out.println("Press 1 if the building is for rent\t" +
-                        "press 2 if the building is for sale");
-                rentOrSaleInt = scanner.nextInt();
-                if (rentOrSaleInt == 1) {
-                    rentOrSale = true;
-                }
-                if (rentOrSaleInt == 2) {
-                    rentOrSale = false;
-                }
-            } while (rentOrSaleInt != 1 && rentOrSaleInt != 2);
-            System.out.println("What is the price for the property?");
-            int price = scanner.nextInt();
-            boolean ifCreated = false;
-            Property property1 = new Property(this.cities[city].getName(), this.cities[city].getAvailableStreets(), room, price, 1, rentOrSale, homeNumber, floor, user);
-
-            for (int j = 0; j < this.properties.length; j++) {
-                if (properties[j] == null) {
-                    properties[j] = property1;
-                    ifCreated = true;
-                    break;
-                }
+        do {
+            System.out.println("How many rooms are in the property?");
+            String roomNumber = scanner.nextLine();
+            room = isValidNum(roomNumber);
+        } while (room < 0);
+        System.out.println("What is the property's house number?");
+        String houseNumber = scanner.nextLine();
+        int homeNumber = isValidNum(houseNumber);
+        if(homeNumber == -1){
+            System.out.println("Home number is invalid - default value is -1");
+        }
+        boolean rentOrSale = false;
+        int rentOrSaleInt;
+        String tempRent;
+        do {
+            System.out.println("Press 1 if the building is for rent\t" +
+                    "press 2 if the building is for sale");
+            tempRent = scanner.nextLine();
+            rentOrSaleInt = isValidNum(tempRent);
+            if (rentOrSaleInt == FOR_RENT) {
+                rentOrSale = true;
             }
+        } while (rentOrSaleInt != FOR_RENT && rentOrSaleInt != FOR_SALE);
+        System.out.println("What is the price for the property?");
+        String tempPrice = scanner.nextLine();
+        int price = isValidNum(tempPrice);
+        if(price == -1){
+            price = 0;
+            System.out.println("Invalid input - Unknown price");
+        }
 
-            if (ifCreated) {
-                System.out.println("Property saved");
-                menuProperty(user);
-            } else {
-                System.out.println("The property did not assign to the system");
+        boolean ifCreated = false;
+        Property property1 = new Property(this.cities[city].getName(), this.cities[city].getAvailableStreets(), room, price, 1, rentOrSale, homeNumber, floor, user);
+
+        for (int j = 0; j < this.properties.length; j++) {
+            if (properties[j] == null) {
+                properties[j] = property1;
+                ifCreated = true;
+                break;
             }
-            return ifCreated;
         }
-    private int isValidNum (String num) {
-        boolean check=true;
-        int number=-1;
-        for(int i=0;i<num.length();i++){
-        if(num.charAt(i)<'0' || num.charAt(i)>'9') {
-            check = false;
-            break;
+
+        if (ifCreated) {
+            System.out.println("Property saved");
+            menuProperty(user);
+        } else {
+            System.out.println("The property did not assign to the system");
         }
+        return ifCreated;
+    }
+
+    private int isValidNum(String num) {
+        boolean check = true;
+        int number = -1;
+        for (int i = 0; i < num.length(); i++) {
+            if (num.charAt(i) < '0' || num.charAt(i) >= ':') {
+                check = false;
+                break;
+            }
         }
-        if(check)number=Integer.parseInt(num);
+        if (check) number = Integer.parseInt(num);
         return number;
     }
 
@@ -437,10 +459,12 @@ public class RealEstate {
                     count++;
                 }
             }
+            String tempRemove;
             int remove;
             do {
                 System.out.println("Select the number you want to remove");
-                remove = scanner.nextInt();
+                tempRemove = scanner.nextLine();
+                remove = isValidNum(tempRemove);
             } while (remove > counter || remove <= 0);
             remove -= 1;
             boolean removed = false;
@@ -452,7 +476,8 @@ public class RealEstate {
                 }
             }
             if (removed) System.out.println("The removal was successful");
-        }menuProperty(user);
+        }
+        menuProperty(user);
 
     }
 
@@ -464,7 +489,8 @@ public class RealEstate {
                 System.out.println(counter + ") " + properties[i]);
                 counter++;
             }
-        }menuProperty(user);
+        }
+        menuProperty(user);
     }
 
     //O(n) Complexity
@@ -475,54 +501,62 @@ public class RealEstate {
                 System.out.println(counter + ") " + properties[i]);
                 counter++;
             }
-        }menuProperty(user);
+        }
+        menuProperty(user);
     }
 
     //O(n) Complexity
     public Property[] search(User user) { // לא לקבל את המידע מתוך המחלקה וליצור מתודה לחיפוש מתוך הנכסים
         Scanner scanner = new Scanner(System.in);
         int rentOrSaleInt;
+        String tempRentOrSale;
         boolean rentOrSale = false;
         do {
             System.out.println("Press 1 if the building is for rent\t" +
                     "press 2 if the building is for sale");
-            rentOrSaleInt = scanner.nextInt();
-            if (rentOrSaleInt == 1) {
+            tempRentOrSale = scanner.nextLine();
+            rentOrSaleInt = isValidNum(tempRentOrSale);
+            if (rentOrSaleInt == FOR_RENT) {
                 rentOrSale = true;
             }
-            if (rentOrSaleInt == 2) {
-                rentOrSale = false;
-            }
-        } while ((rentOrSaleInt < 1 || rentOrSaleInt > 2) && rentOrSaleInt != FILTERING_PARAMETER);
+        } while ((rentOrSaleInt < FOR_RENT || rentOrSaleInt > FOR_SALE) && rentOrSaleInt != FILTERING_PARAMETER);
 
         int type;
+        String tempType;
         do {
             System.out.println("Press 1 if The property type is an apartment\n" +
                     "press 2 if if The property type is Penthouse apartment\n"
                     + "press 3 if The property type is Private house\n");
 
-            type = scanner.nextInt();
-        } while ((type < 1 || type > 3) && type != FILTERING_PARAMETER);
+            tempType = scanner.nextLine();
+            type = isValidNum(tempType);
+        } while ((type < APARTMENT || type > PRIVATE_HOUSE) && type != FILTERING_PARAMETER);
 
         int rooms;
+        String tempRooms;
         do {
             System.out.println("Enter a number of rooms:");
-            rooms = scanner.nextInt();
+            tempRooms = scanner.nextLine();
+            rooms = isValidNum(tempRooms);
         } while (rooms <= MINIMUM_ROOMS && type != FILTERING_PARAMETER);
 
         int minPrice;
+        String tempMin;
         int maxPrice;
+        String tempMax;
         do {
             System.out.println("Enter the price range:\n" + "Min price:");
-            minPrice = scanner.nextInt();
+            tempMin = scanner.nextLine();
+            minPrice = isValidNum(tempMin);
             System.out.println("Max price:");
-            maxPrice = scanner.nextInt();
+            tempMax = scanner.nextLine();
+            maxPrice = isValidNum(tempMax);
         } while ((maxPrice < minPrice) && (minPrice != FILTERING_PARAMETER && maxPrice != FILTERING_PARAMETER));
 
         Property[] propertySearch = new Property[properties.length];
         int counter = 0;
         for (int i = 0; i < properties.length; i++) {
-            if (properties[i]!=null){
+            if (properties[i] != null) {
                 if (properties[i].isRentable() == rentOrSale || rentOrSaleInt == FILTERING_PARAMETER) {
                     if (properties[i].getBuildingType() == type || type == FILTERING_PARAMETER) {
                         if (properties[i].getNumberOfRooms() == rooms || rooms == FILTERING_PARAMETER) {
@@ -533,7 +567,7 @@ public class RealEstate {
                         }
                     }
                 }
-            }else{
+            } else {
                 System.out.println("There is no property for sale at your preference ");
                 menuProperty(user);
             }
