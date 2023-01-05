@@ -579,7 +579,6 @@ public class RealEstate {
 
 
 }
-//Waiting for the bus
-
+//אביחי הגבר
 
 
