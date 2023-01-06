@@ -2,12 +2,12 @@ import java.util.Scanner;
 
 public class RealEstate {
 
-    private User[] users = new User[5];
-    private Property[] properties = new Property[5];
+    private User[] users;
+    private Property[] properties;
     private City[] cities;
     private final int FIRST_NUMBER = 0, SECOND_NUMBER = 1, PHONE_LENGTH = 10, MIN_PASS_LENGTH = 5,
             FILTERING_PARAMETER = -999, REAL_ESTATE_AGENT = 1, REGULAR_USER = 2, MINIMUM_ROOMS = 0
-            ,APARTMENT = 1, PENTHOUSE = 2, PRIVATE_HOUSE = 3, FOR_RENT = 1, FOR_SALE = 2;
+            ,APARTMENT = 1, PENTHOUSE = 2, PRIVATE_HOUSE = 3, FOR_RENT = 1, FOR_SALE = 2,MINARRAY=1;
 
 
     //O(1) Complexity
@@ -42,7 +42,7 @@ public class RealEstate {
                 case "3" -> endProgram();
             }
 
-        } while (choice != "3");
+        } while (choice!= "3");
     }
 
     public void endProgram() {
@@ -54,40 +54,40 @@ public class RealEstate {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please insert your user name");
         String userName = scanner.nextLine();
+        System.out.println("Please enter your password");
+        String password = scanner.nextLine();
         User user = null;
         boolean currectUser = false;
         int userLocation = -1;
-        for (int i = 0; i < users.length; i++) {
-            if (users[i] != null) {
-                if (users[i].getName().equals(userName)) {
-                    userLocation = i;
+        if(this.users!= null){
+        for (int i = 0; i < this.users.length; i++) {
+                if(this.users[i].matchCreds(userName,password)){
                     currectUser = true;
+                    user=this.users[i];
                     break;
                 }
             }
         }
         if (!currectUser) System.out.println("The user doesn't exists in the system");
-        if (currectUser) {
-            System.out.println("Please enter your password");
-            String password = scanner.nextLine();
-            if (users[userLocation].getPassword().equals(password)) {
-                user = users[userLocation];
-            } else System.out.println("The password doesn't exists in the system");
-        }
         return user;
     }
 
     //O(n) Complexity
     public void createUser() {
-        User[] usersArray = new User[this.users.length + 1];
-        for (int i = 0; i < this.users.length; i++) {
-            usersArray[i] = this.users[i];
+        if (this.users == null) {
+            this.users = new User[this.MINARRAY];
+            User newUser = new User(userId(), password(), phoneNumber(), isRealEstateAgent());
+            this.users[this.MINARRAY - 1] = newUser;
+        } else {
+            User[] usersArray = new User[this.users.length + 1];
+            for (int i = 0; i < this.users.length; i++) {
+                usersArray[i] = this.users[i];
+            }
+            User newUser = new User(userId(), password(), phoneNumber(), isRealEstateAgent());
+            usersArray[this.users.length] = newUser;
+            this.users = usersArray;
         }
-        User newUser = new User(userId(), password(), phoneNumber(), isRealEstateAgent());
-        usersArray[this.users.length] = newUser;
-        this.users = usersArray;
     }
-
     //O(n) Complexity
     private String userId() {
         Scanner scanner = new Scanner(System.in);
@@ -249,9 +249,8 @@ public class RealEstate {
         Scanner scanner = new Scanner(System.in);
         boolean checkAllowPost;
         int counter = 0;
-
-        for (int i = 0; i < properties.length; i++) {
-            if (properties[i] != null) {
+        if(this.properties!=null) {
+            for (int i = 0; i < properties.length; i++) {
                 if (properties[i].getSellerName() == user)
                     counter++;
             }
@@ -273,17 +272,16 @@ public class RealEstate {
             if (city == -1) {
                 System.out.println("The name of the city does not exist in the system");
                 checkAllowPost = false;
-                menuProperty(user);
+                //menuProperty(user); לא טוב מחזיר לתפריט ולאחר סיום התפריט יחזור להמשך שורות הקוד במתודה זו
             } else {
                 boolean currectStreet = checkStreets(city);
                 if (!currectStreet) {
                     System.out.println("The street you entered is not on the available streets list");
                     checkAllowPost = false;
-                    menuProperty(user);
+                    //menuProperty(user);לא טוב מחזיר לתפריט ולאחר סיום התפריט יחזור להמשך שורות הקוד במתודה זו
                 } else {
                     checkAllowPost = propertyType(user, city);
                 }
-
             }
         }
         return checkAllowPost;
@@ -347,11 +345,11 @@ public class RealEstate {
                 case 1 -> checkBuild = buildingApartment(user, city);
                 case 2 -> {
                     System.out.println("You chose penthouse, will be added on our next program");
-                    menuProperty(user);
+                   // menuProperty(user);
                 }
                 case 3 -> {
                     System.out.println("You choose private house, will be added on our next program");
-                    menuProperty(user);
+                  //  menuProperty(user);
                 }
             }
         } else System.out.println("You choose an invalid option ");
@@ -405,18 +403,31 @@ public class RealEstate {
 
         boolean ifCreated = false;
         Property property1 = new Property(this.cities[city].getName(), this.cities[city].getAvailableStreets(), room, price, 1, rentOrSale, homeNumber, floor, user);
-
-        for (int j = 0; j < this.properties.length; j++) {
-            if (properties[j] == null) {
-                properties[j] = property1;
-                ifCreated = true;
-                break;
+        if(this.properties==null){
+            this.properties=new Property[this.MINARRAY];
+            this.properties[this.MINARRAY-1]=property1;
+            ifCreated = true;
+        }else {
+            for (int t = 0; t < this.properties.length; t++) { //בודק אם יש מקום פנוי במערך שניתן להכניס (מכיוון שיש אופציה למחיקת נכס.
+                if (this.properties[t] == null) {
+                    this.properties[t] = property1;
+                    ifCreated = true;
+                    break;
+                }
+            }
+            if (!ifCreated) {
+                Property[] newProperties = new Property[this.properties.length + 1];
+                for (int j = 0; j < this.properties.length; j++) {
+                    newProperties[j] = properties[j];
+                }
+                this.properties = newProperties;
+                    this.properties[newProperties.length] = property1;
+                    ifCreated = true;
             }
         }
-
         if (ifCreated) {
             System.out.println("Property saved");
-            menuProperty(user);
+            //menuProperty(user);
         } else {
             System.out.println("The property did not assign to the system");
         }
@@ -443,10 +454,12 @@ public class RealEstate {
         Scanner scanner = new Scanner(System.in);
         int counter = 0;
         Property[] propertyLocation = new Property[MAX_PROPERTY];
-        for (int i = 0; i < properties.length; i++) {
-            if (properties[i] != null && properties[i].getSellerName() == user) {
-                propertyLocation[counter] = properties[i];
-                counter++;
+        if(this.properties!=null) {
+            for (int i = 0; i < properties.length; i++) {
+                if (properties[i] != null && properties[i].getSellerName() == user) {
+                    propertyLocation[counter] = properties[i];
+                    counter++;
+                }
             }
         }
         if (counter == 0) {
@@ -484,25 +497,29 @@ public class RealEstate {
     //O(n) Complexity
     private void printAllProperties(User user) {
         int counter = 1;
-        for (int i = 0; i < properties.length; i++) {
-            if (properties[i] != null) {
-                System.out.println(counter + ") " + properties[i]);
-                counter++;
+        if(this.properties!=null) {
+            for (int i = 0; i < properties.length; i++) {
+                if (properties[i] != null) {
+                    System.out.println(counter + ") " + properties[i]);
+                    counter++;
+                }
             }
-        }
-        menuProperty(user);
+           // menuProperty(user);
+        }else System.out.println("There is nothing to print");
     }
 
     //O(n) Complexity
     private void printProperties(User user) {
         int counter = 1;
-        for (int i = 0; i < properties.length; i++) {
-            if (properties[i] != null && properties[i].getSellerName() == user) {
-                System.out.println(counter + ") " + properties[i]);
-                counter++;
+        if(this.properties!=null) {
+            for (int i = 0; i < properties.length; i++) {
+                if (properties[i] != null && properties[i].getSellerName() == user) {
+                    System.out.println(counter + ") " + properties[i]);
+                    counter++;
+                }
             }
-        }
-        menuProperty(user);
+            //menuProperty(user);
+        }else System.out.println("There is nothing to print");
     }
 
     //O(n) Complexity
@@ -552,33 +569,33 @@ public class RealEstate {
             tempMax = scanner.nextLine();
             maxPrice = isValidNum(tempMax);
         } while ((maxPrice < minPrice) && (minPrice != FILTERING_PARAMETER && maxPrice != FILTERING_PARAMETER));
-
-        Property[] propertySearch = new Property[properties.length];
         int counter = 0;
-        for (int i = 0; i < properties.length; i++) {
-            if (properties[i] != null) {
-                if (properties[i].isRentable() == rentOrSale || rentOrSaleInt == FILTERING_PARAMETER) {
-                    if (properties[i].getBuildingType() == type || type == FILTERING_PARAMETER) {
-                        if (properties[i].getNumberOfRooms() == rooms || rooms == FILTERING_PARAMETER) {
-                            if ((properties[i].getPrice() >= minPrice && properties[i].getPrice() <= maxPrice) && properties[i].getPrice() != null || (minPrice == FILTERING_PARAMETER || maxPrice == FILTERING_PARAMETER)) {
-                                propertySearch[counter] = properties[i];
-                                counter++;
+        Property[] propertySearch=null;
+        if(this.properties!=null) {
+            propertySearch = new Property[properties.length];
+            for (int i = 0; i < properties.length; i++) {
+                if (properties[i] != null) {
+                    if (properties[i].isRentable() == rentOrSale || rentOrSaleInt == FILTERING_PARAMETER) {
+                        if (properties[i].getBuildingType() == type || type == FILTERING_PARAMETER) {
+                            if (properties[i].getNumberOfRooms() == rooms || rooms == FILTERING_PARAMETER) {
+                                if ((properties[i].getPrice() >= minPrice && properties[i].getPrice() <= maxPrice) && properties[i].getPrice() != null || (minPrice == FILTERING_PARAMETER || maxPrice == FILTERING_PARAMETER)) {
+                                    propertySearch[counter] = properties[i];
+                                    counter++;
+                                }
                             }
                         }
                     }
+                } else {
+                    System.out.println("There is no property for sale at your preference ");
+                    //menuProperty(user);
                 }
-            } else {
-                System.out.println("There is no property for sale at your preference ");
-                menuProperty(user);
             }
         }
-        Property[] propertyNewSearch = new Property[counter];
-        propertyNewSearch = propertySearch;
-        return propertyNewSearch;
+        return propertySearch;
     }
 
 
 }
-//אביחי הגבר
+
 
 
