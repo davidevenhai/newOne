@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class RealEstate {
@@ -39,15 +40,12 @@ public class RealEstate {
                         menuProperty(user);
                     }
                 }
-                case "3" -> endProgram();
+                case "3" -> System.out.println("Bye");
             }
 
-        } while (choice!= "3");
+        } while (!choice.equals("3"));
     }
 
-    public void endProgram() {
-        System.out.println("Bye.");
-    }
 
     //O(n) Complexity
     public User login() {
@@ -284,6 +282,7 @@ public class RealEstate {
                 }
             }
         }
+        menuProperty(user);
         return checkAllowPost;
     }
 
@@ -399,7 +398,9 @@ public class RealEstate {
         if(price == -1){
             price = 0;
             System.out.println("Invalid input - Unknown price");
+
         }
+
 
         boolean ifCreated = false;
         Property property1 = new Property(this.cities[city].getName(), this.cities[city].getAvailableStreets(), room, price, 1, rentOrSale, homeNumber, floor, user);
@@ -421,17 +422,13 @@ public class RealEstate {
                     newProperties[j] = properties[j];
                 }
                 this.properties = newProperties;
-                    this.properties[newProperties.length] = property1;
+                    this.properties[newProperties.length-1] = property1;
                     ifCreated = true;
             }
         }
-        if (ifCreated) {
             System.out.println("Property saved");
-            //menuProperty(user);
-        } else {
-            System.out.println("The property did not assign to the system");
-        }
-        return ifCreated;
+
+        return true;
     }
 
     private int isValidNum(String num) {
@@ -506,6 +503,7 @@ public class RealEstate {
             }
            // menuProperty(user);
         }else System.out.println("There is nothing to print");
+        menuProperty(user);
     }
 
     //O(n) Complexity
@@ -518,8 +516,9 @@ public class RealEstate {
                     counter++;
                 }
             }
-            //menuProperty(user);
+
         }else System.out.println("There is nothing to print");
+        menuProperty(user);
     }
 
     //O(n) Complexity
@@ -585,12 +584,17 @@ public class RealEstate {
                             }
                         }
                     }
-                } else {
-                    System.out.println("There is no property for sale at your preference ");
-                    //menuProperty(user);
                 }
             }
         }
+        if(propertySearch == null){
+            System.out.println("There are no property for sale at your preference ");
+        }
+        if(propertySearch != null){
+            System.out.println(Arrays.toString(propertySearch));
+        }
+
+        menuProperty(user);
         return propertySearch;
     }
 

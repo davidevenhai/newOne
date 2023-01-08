@@ -25,10 +25,10 @@ public class Property {
 
     @Override
     public String toString() {
-        return city + "-" + street + " " + houseNumber + ".\n" +
+        return city + " - " + street + " " + houseNumber + ".\n" +
                 buildingTypes[this.buildingType] + " - for " + ConversionRentable() + ":" + this.numberOfRooms + " rooms ,floor number " + this.floorNumber + "\n" +
                 "Price: "+ this.price+"$.\n"+
-                "Contact info: "+this.sellerName;
+                "Contact info: "+this.sellerName+"\n"+"\n";
     }
 
     public String getCity() {
