@@ -48,7 +48,10 @@ public class Property {
     }
 
     public Integer getNumberOfRooms() {
-        return numberOfRooms;
+        return this.numberOfRooms;
+    }
+    public boolean matchNumberRooms(int room){
+        return this.numberOfRooms==room;
     }
 
     public void setNumberOfRooms(Integer numberOfRooms) {
@@ -56,7 +59,10 @@ public class Property {
     }
 
     public Integer getPrice() {
-        return price;
+        return this.price;
+    }
+    public boolean matchPriceRange(int minPrice,int maxPrice){
+        return (this.price>=minPrice &&this.price<=maxPrice);
     }
 
     public void setPrice(Integer price) {
@@ -64,7 +70,10 @@ public class Property {
     }
 
     public int getBuildingType() {
-        return buildingType;
+        return this.buildingType;
+    }
+    public boolean matchBuildingType(int type){
+        return this.buildingType==type;
     }
 
     public void setBuildingType(int buildingType) {
@@ -72,7 +81,10 @@ public class Property {
     }
 
     public boolean isRentable() {
-        return isRentable;
+        return this.isRentable;
+    }
+    public boolean matchRentable(boolean rentOrSale){
+        return this.isRentable==rentOrSale;
     }
 
     public String ConversionRentable() {
