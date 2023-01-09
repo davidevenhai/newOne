@@ -193,14 +193,16 @@ public class RealEstate {
     //O(n) Complexity
     private boolean isValidPhoneNumber(String phoneNumber) {
         boolean isValid = false;
-        if (phoneNumber.charAt(FIRST_NUMBER) == '0' && phoneNumber.charAt(SECOND_NUMBER) == '5' && phoneNumber.length() == PHONE_LENGTH) {
-            for (int i = 0; i < phoneNumber.length(); i++) {
-                char tempChar = phoneNumber.charAt(i);
-                if (!Character.isDigit(tempChar)) {
-                    isValid = false;
-                    break;
-                } else {
-                    isValid = true;
+        if(!phoneNumber.equals("")) {
+            if (phoneNumber.charAt(FIRST_NUMBER) == '0' && phoneNumber.charAt(SECOND_NUMBER) == '5' && phoneNumber.length() == PHONE_LENGTH) {
+                for (int i = 0; i < phoneNumber.length(); i++) {
+                    char tempChar = phoneNumber.charAt(i);
+                    if (!Character.isDigit(tempChar)) {
+                        isValid = false;
+                        break;
+                    } else {
+                        isValid = true;
+                    }
                 }
             }
         }
@@ -228,6 +230,7 @@ public class RealEstate {
             newChoiceNumber = isValidNum(newChoice);
             if (newChoiceNumber == -1 || newChoiceNumber > 6) {
                 System.out.println("You entered invalid input");
+                newChoiceNumber=0;
             } else {
                 switch (newChoiceNumber) {
                     case 1 -> postNewProperty(user);
@@ -249,8 +252,10 @@ public class RealEstate {
         int counter = 0;
         if (this.properties != null) {
             for (int i = 0; i < properties.length; i++) {
-                if (properties[i].getSellerName() == user)
-                    counter++;
+                if(properties[i]!=null) {
+                    if (properties[i].getSellerName() == user)
+                        counter++;
+                }
             }
         }
 
@@ -366,6 +371,9 @@ public class RealEstate {
             System.out.println("What floor is the property on?");
             nameFloor = scanner.nextLine();
             floor = isValidNum(nameFloor);
+            if (floor == -1) {
+                System.out.println("Floor number is invalid ");
+            }
         } while (floor == -1);
         int room;
 
@@ -373,13 +381,21 @@ public class RealEstate {
             System.out.println("How many rooms are in the property?");
             String roomNumber = scanner.nextLine();
             room = isValidNum(roomNumber);
+            if (room == -1) {
+                System.out.println("Room number is invalid ");
+            }
         } while (room < 0);
-        System.out.println("What is the property's house number?");
-        String houseNumber = scanner.nextLine();
-        int homeNumber = isValidNum(houseNumber);
-        if (homeNumber == -1) {
-            System.out.println("Home number is invalid - default value is -1");
-        }
+        int homeNumber;
+        do {
+            System.out.println("What is the property's house number?");
+            String houseNumber = scanner.nextLine();
+             homeNumber = isValidNum(houseNumber);
+            if (homeNumber == -1) {
+                System.out.println("Home number is invalid ");
+            }
+        }while (homeNumber < 0);
+
+
         boolean rentOrSale = false;
         int rentOrSaleInt;
         String tempRent;
