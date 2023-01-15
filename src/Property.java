@@ -26,7 +26,8 @@ public class Property {
     @Override
     public String toString() {
         return city + " - " + street + " " + houseNumber + ".\n" +
-                buildingTypes[this.buildingType] + " - for " + ConversionRentable() + ":" + this.numberOfRooms + " rooms ,floor number " + this.floorNumber + "\n" +
+                buildingTypes[this.buildingType] + " - for " + ConversionRentable() + ":" + this.numberOfRooms + "\n" +
+                "rooms ,floor number " + this.floorNumber + "\n" +
                 "Price: "+ this.price+"$.\n"+
                 "Contact info: "+this.sellerName+"\n"+"\n";
     }
@@ -80,9 +81,6 @@ public class Property {
         this.buildingType = buildingType;
     }
 
-    public boolean isRentable() {
-        return this.isRentable;
-    }
     public boolean matchRentable(boolean rentOrSale){
         return this.isRentable==rentOrSale;
     }
