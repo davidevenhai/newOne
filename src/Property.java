@@ -86,7 +86,7 @@ public class Property {
     public boolean matchRentable(boolean rentOrSale){
         return this.isRentable==rentOrSale;
     }
-
+    //O(n) Complexity
     public String ConversionRentable() {
         String rentOrSell;
         if (this.isRentable) {

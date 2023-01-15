@@ -23,6 +23,30 @@ public class RealEstate {
         City nahariya = new City("Nahariya", "North", "Bar kochva, Balfor");
         City carmiel = new City("Carmiel", "North", "Paratroops, Navon");
         this.cities = new City[]{yeruham, dimona, ashkelon, ashdod, telAviv, rishonLezion, netanya, herzliya, nahariya, carmiel};
+//        Scanner scanner = new Scanner(System.in);
+//        String choice;
+//        do {
+//            System.out.println("""
+//                    Please enter 1 - to create a new user
+//                    Please enter 2 - to log in
+//                    Please enter 3 to quit the program""");
+//            choice = scanner.nextLine();
+//            switch (choice) {
+//                case "1" -> createUser();
+//                case "2" -> {
+//                    User user = login();
+//                    if (user != null) {
+//                        menuProperty(user);
+//                    }
+//                }
+//                case "3" -> System.out.println("Bye");
+//            }
+//
+//        } while (!choice.equals("3"));
+        mainMenu();
+    }
+    //O(1) Complexity
+    public void mainMenu(){
         Scanner scanner = new Scanner(System.in);
         String choice;
         do {
@@ -90,7 +114,7 @@ public class RealEstate {
     private String userId() {
         Scanner scanner = new Scanner(System.in);
         String userId;
-        boolean checkName = false;
+        boolean checkName;
         do {
             System.out.println("Please enter your user name");
             userId = scanner.nextLine();
@@ -230,7 +254,6 @@ public class RealEstate {
             newChoiceNumber = isValidNum(newChoice);
             if (newChoiceNumber == -1 || newChoiceNumber > 6) {
                 System.out.println("You entered invalid input");
-                newChoiceNumber=0;
             } else {
                 switch (newChoice) {
                     case "1" -> postNewProperty(user);
