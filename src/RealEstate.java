@@ -500,7 +500,7 @@ public class RealEstate {
             }
             if (removed) System.out.println("The removal was successful");
         }
-        menuProperty(user);
+
 
     }
 
@@ -515,7 +515,7 @@ public class RealEstate {
                 }
             }
         } else System.out.println("There is nothing to print");
-        menuProperty(user);
+
     }
 
     //O(n) Complexity
@@ -530,7 +530,7 @@ public class RealEstate {
             }
 
         } else System.out.println("There is nothing to print");
-        menuProperty(user);
+
     }
 
     //O(n) Complexity
