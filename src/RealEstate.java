@@ -242,7 +242,7 @@ public class RealEstate {
                     case "3" -> printAllProperties(user);
                     case "4" -> printProperties(user);
                     case "5" -> search(user);
-                   // case "6" -> //mainMenu();
+                     case "6" -> System.out.println("Exit to the main menu");
                 }
             }
         } while (!newChoice.equals("6"));
